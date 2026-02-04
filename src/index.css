@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 248 249 252;
+  --fg: 9 12 20;
+  --muted: 9 12 20;
+  --card: 255 255 255;
+  --border: 9 12 20;
+  --accent: 59 130 246; /* blue */
+  --accent2: 16 185 129; /* emerald */
+  --good: 22 163 74;
+  --warn: 245 158 11;
+  --bad: 239 68 68;
+}
+
+.dark {
+  --bg: 5 8 16;
+  --fg: 236 242 255;
+  --muted: 236 242 255;
+  --card: 12 17 34;
+  --border: 236 242 255;
+  --accent: 34 211 238; /* cyan */
+  --accent2: 168 85 247; /* purple */
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1000px 520px at 20% 0%, rgb(var(--accent) / 0.18), transparent 68%),
+    radial-gradient(900px 520px at 92% 18%, rgb(var(--accent2) / 0.12), transparent 65%),
+    linear-gradient(180deg, rgb(var(--bg) / 0.92), rgb(var(--bg)));
+  color: rgb(var(--fg));
+}
+
+.mc-grid {
+  background-image:
+    linear-gradient(to right, rgb(var(--border) / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--border) / 0.08) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at 40% 0%, black, transparent 70%);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 0 1px rgb(var(--border) / 0.10), 0 28px 90px rgb(0 0 0 / 0.35);
+}
