@@ -5,6 +5,7 @@ import {
   Blocks,
   Cpu,
   GitBranch,
+  KeyRound,
   LayoutGrid,
   Link2,
   LogOut,
@@ -20,6 +21,7 @@ import {
   crons,
   missingTools,
   projects,
+  security,
   skills,
   subAgents,
   systemHealth,
@@ -367,6 +369,86 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     </div>
                   </div>
                 </Panel>
+                <Panel title="Sécurité" icon={<KeyRound size={16} />}>
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="rounded-2xl border border-border/10 bg-card/40 px-3 py-3">
+                      <div className="text-xs text-muted/70">Score global</div>
+                      <div className="mt-2 flex items-end justify-between">
+                        <div className="text-3xl font-semibold text-fg">{security.score}</div>
+                        <Chip tone={security.score >= 85 ? 'good' : security.score >= 70 ? 'warn' : 'bad'}>
+                          {security.score >= 85 ? 'STRONG' : security.score >= 70 ? 'WATCH' : 'RISK'}
+                        </Chip>
+                      </div>
+                      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-fg/10">
+                        <div
+                          className={clsx(
+                            'h-full rounded-full',
+                            security.score >= 85 ? 'bg-good' : security.score >= 70 ? 'bg-warn' : 'bg-bad'
+                          )}
+                          style={{ width: `${security.score}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/10 bg-card/40 px-3 py-3">
+                      <div className="text-xs font-semibold text-fg">Alertes</div>
+                      <div className="mt-3 space-y-2">
+                        {security.alerts.map((a) => (
+                          <div key={a.title} className="rounded-2xl border border-border/10 bg-card/30 px-3 py-3">
+                            <div className="flex items-center justify-between">
+                              <div className="text-sm font-semibold text-fg">{a.title}</div>
+                              <Chip tone={a.severity === 'high' ? 'bad' : a.severity === 'med' ? 'warn' : 'neutral'}>
+                                {a.severity}
+                              </Chip>
+                            </div>
+                            <div className="mt-1 text-xs text-muted/70">{a.note}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/10 bg-card/40 px-3 py-3">
+                      <div className="text-xs font-semibold text-fg">Clés API</div>
+                      <div className="mt-3 space-y-2">
+                        {security.apiKeys.map((k) => (
+                          <div key={k.name} className="flex items-start justify-between gap-3">
+                            <div>
+                              <div className="text-sm font-semibold text-fg">{k.name}</div>
+                              <div className="mt-0.5 text-xs text-muted/70">{k.note}</div>
+                            </div>
+                            <Chip tone={k.status === 'ok' ? 'good' : k.status === 'warn' ? 'warn' : 'bad'}>
+                              {k.status}
+                            </Chip>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/10 bg-card/40 px-3 py-3">
+                      <div className="text-xs font-semibold text-fg">Accès récents</div>
+                      <div className="mt-3 space-y-2">
+                        {security.access.map((x) => (
+                          <div key={`${x.when}-${x.ip}-${x.action}`} className="flex items-center justify-between text-xs">
+                            <span className="text-muted/70">{x.when} • {x.ip}</span>
+                            <span className={clsx('font-semibold', x.result === 'success' ? 'text-good' : 'text-bad')}>
+                              {x.action}:{x.result}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-border/10 bg-card/40 px-3 py-3">
+                      <div className="text-xs font-semibold text-fg">Recommandations</div>
+                      <ul className="mt-3 space-y-1 text-xs text-muted/70">
+                        {security.recommendations.map((r) => (
+                          <li key={r}>• {r}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </Panel>
+
                 <Panel title="Optimisations" icon={<Cpu size={16} />}>
                   <ul className="space-y-2 text-sm text-muted/70">
                     <li>• Cache prompts & embeddings</li>

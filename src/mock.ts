@@ -65,3 +65,28 @@ export const usage = {
     { name: 'Grok', share: 20 },
   ],
 }
+
+export const security = {
+  score: 78,
+  apiKeys: [
+    { name: 'GITHUB_TOKEN', status: 'ok', note: 'Not exposed • scoped token' },
+    { name: 'VERCEL_TOKEN', status: 'warn', note: 'Rotate quarterly' },
+    { name: 'OPENAI_API_KEY', status: 'warn', note: 'Check org permissions' },
+    { name: 'ELEVENLABS_API_KEY', status: 'ok', note: 'Not detected in logs' },
+  ] as const,
+  access: [
+    { when: 'today 19:58', ip: '192.0.2.44', action: 'login', result: 'success' },
+    { when: 'today 19:41', ip: '203.0.113.9', action: 'login', result: 'failed' },
+    { when: 'yesterday 23:12', ip: '192.0.2.10', action: 'token', result: 'success' },
+  ] as const,
+  alerts: [
+    { severity: 'high', title: 'Sensitive env var detected in build logs', note: 'Verify no tokens are printed' },
+    { severity: 'med', title: 'Token rotation due soon', note: 'VERCEL_TOKEN nearing policy window' },
+  ] as const,
+  recommendations: [
+    'Rotate VERCEL_TOKEN and invalidate old token',
+    'Verify GitHub token scopes: repo, workflow only',
+    'Add Sentry for auth anomaly detection',
+    'Enable 2FA + enforce SSO on org projects',
+  ] as const,
+}
